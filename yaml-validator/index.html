@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="de" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <title>Home Assistant YAML Validator</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Clientseitiger YAML-Validator für Home Assistant Automationen" />
+  <meta name="referrer" content="no-referrer" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50:'#f0fdf4',
+              100:'#dcfce7',
+              500:'#16a34a',
+              600:'#15803d',
+              700:'#166534'
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <!-- js-yaml -->
+  <script defer src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body class="min-h-full bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 text-slate-800 dark:text-slate-100 font-sans selection:bg-brand-600/30">
+  <header class="w-full border-b border-slate-200 dark:border-slate-700 bg-white/85 dark:bg-slate-900/70 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-10">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex flex-wrap gap-4 items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-semibold tracking-tight">Home Assistant YAML Validator</h1>
+        <p class="text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-1">Offline & rein clientseitig. Füge deine Automation(en) ein und klicke auf Prüfen.</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="themeToggle" class="px-3 py-2 text-xs rounded-md border border-slate-300 dark:border-slate-600 bg-white/60 dark:bg-slate-800/60 hover:bg-slate-200 dark:hover:bg-slate-700 transition focus:outline-none focus:ring-2 focus:ring-brand-500/50">
+          🌗 <span class="sr-only">Theme umschalten</span>
+        </button>
+        <a href="https://www.home-assistant.io/docs/automation/" target="_blank" rel="noopener" class="hidden sm:inline text-xs text-brand-700 dark:text-brand-100 hover:underline focus:outline-none focus:ring-2 focus:ring-brand-500/50 rounded px-2 py-1">
+          Doku: Automationen
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-6 flex flex-col gap-8">
+    <section>
+      <label for="yamlInput" class="block font-medium mb-2">Automation YAML</label>
+      <textarea
+        id="yamlInput"
+        spellcheck="false"
+        class="w-full h-72 md:h-[28rem] resize-vertical rounded-lg border border-slate-300 dark:border-slate-600 bg-white/70 dark:bg-slate-900/60 focus:outline-none focus:ring-2 focus:ring-brand-500/60 p-4 font-mono text-sm leading-relaxed"
+        placeholder="# Beispiel
+- alias: Licht an bei Bewegung
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.bewegung
+      to: 'on'
+  action:
+    - service: light.turn_on
+      target:
+        entity_id: light.flur"></textarea>
+      <p id="inputHelp" class="mt-2 text-xs text-slate-500 dark:text-slate-400">Deine Daten verlassen nie deinen Browser.</p>
+      <div class="mt-4 flex flex-wrap gap-3 items-center">
+        <button id="validateBtn" class="px-5 py-2.5 rounded-md bg-brand-600 hover:bg-brand-500 text-white font-medium shadow focus:outline-none focus:ring-4 focus:ring-brand-500/40 transition">Prüfen</button>
+        <button id="sampleBtn" class="px-4 py-2 rounded-md bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50">Beispiel laden</button>
+        <button id="clearBtn" class="px-4 py-2 rounded-md bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/40">Leeren</button>
+        <button id="copyBtn" class="px-4 py-2 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50">Kopieren</button>
+        <span class="text-xs text-slate-500 dark:text-slate-400 ml-auto hidden md:inline">Shortcut: Ctrl / Cmd + Enter</span>
+      </div>
+    </section>
+
+    <section aria-live="polite" aria-atomic="false" class="space-y-4" id="resultWrapper">
+      <div id="statusArea"></div>
+      <div id="messages" class="space-y-3"></div>
+      <details id="jsonPreviewWrapper" class="hidden group bg-white/70 dark:bg-slate-900/60 rounded-lg border border-slate-300 dark:border-slate-600">
+        <summary class="cursor-pointer select-none px-4 py-2 font-medium flex items-center justify-between leading-none">
+          <span>JSON Preview</span>
+          <span class="text-xs text-slate-500 group-open:hidden">(aufklappen)</span>
+          <span class="text-xs text-slate-500 hidden group-open:inline">(zuklappen)</span>
+        </summary>
+        <pre id="jsonPreview" class="overflow-auto p-4 text-xs leading-snug"></pre>
+      </details>
+    </section>
+  </main>
+
+  <footer class="max-w-5xl mx-auto px-4 py-8 text-xs text-slate-500 dark:text-slate-400">
+    <p>Erstellt als Hilfstool. Keine Gewähr. Verarbeitung erfolgt ausschließlich lokal im Browser.</p>
+    <p class="mt-1">&copy; 2025</p>
+  </footer>
+</body>
+</html>
