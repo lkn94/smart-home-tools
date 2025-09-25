@@ -71,6 +71,7 @@
         <button id="sampleBtn" class="px-4 py-2 rounded-md bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50">Beispiel laden</button>
         <button id="clearBtn" class="px-4 py-2 rounded-md bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/40">Leeren</button>
         <button id="copyBtn" class="px-4 py-2 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50">Kopieren</button>
+        <button id="downloadBtn" class="px-4 py-2 rounded-md bg-brand-100 dark:bg-brand-600/20 hover:bg-brand-200 dark:hover:bg-brand-600/30 text-brand-700 dark:text-brand-100 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50">JSON Export</button>
         <span class="text-xs text-slate-500 dark:text-slate-400 ml-auto hidden md:inline">Shortcut: Ctrl / Cmd + Enter</span>
       </div>
     </section>
@@ -87,11 +88,26 @@
         <pre id="jsonPreview" class="overflow-auto p-4 text-xs leading-snug"></pre>
       </details>
     </section>
+
+    <section class="prose prose-sm dark:prose-invert max-w-none bg-white/60 dark:bg-slate-900/40 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+      <h2>Checks (aktuell)</h2>
+      <ul>
+        <li>YAML Syntax (Multi-Dokument unterstützt)</li>
+        <li>Automations-Erkennung in Listen oder unter Schlüssel <code>automation:</code></li>
+        <li>Pflicht: <code>trigger</code> & <code>action</code></li>
+        <li>Hinweis bei fehlender <code>condition</code></li>
+        <li>Struktur-Warnungen (falscher Typ bei trigger/action)</li>
+        <li>Einfacher Service-Check: Action-Items ohne <code>service</code> & ohne <code>device_id</code> geben Warnung</li>
+        <li>Warnung bei leeren Trigger-/Action-Listen</li>
+        <li>JSON Export & Vorschau</li>
+        <li>Drag & Drop von .yaml / .yml Dateien</li>
+      </ul>
+    </section>
   </main>
 
   <footer class="max-w-5xl mx-auto px-4 py-8 text-xs text-slate-500 dark:text-slate-400">
     <p>Erstellt als Hilfstool. Keine Gewähr. Verarbeitung erfolgt ausschließlich lokal im Browser.</p>
-    <p class="mt-1">&copy; 2025</p>
+    <p class="mt-1">&copy; 2025 – MIT License (siehe LICENSE)</p>
   </footer>
 </body>
 </html>
